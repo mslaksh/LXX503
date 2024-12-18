@@ -13,13 +13,13 @@ jobs:
     steps:
     - name: Set Run Variables
       run: |
-        echo "MANIFEST_URL=https://github.com/PitchBlackRecoveryProject/manifest_pb" >> $GITHUB_ENV
-        echo "MANIFEST_BRANCH=android-12.1" >> $GITHUB_ENV
-        echo "DEVICE_TREE_URL=https://github.com/ayusc/pbrp-LXX503" >> $GITHUB_ENV
+        echo "MANIFEST_URL=https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp" >> $GITHUB_ENV
+        echo "MANIFEST_BRANCH=twrp-12.1" >> $GITHUB_ENV
+        echo "DEVICE_TREE_URL=https://github.com/ayusc/twrp-LXX503" >> $GITHUB_ENV
         echo "DEVICE_TREE_BRANCH=master" >> $GITHUB_ENV
         echo "DEVICE_PATH=device/lava/LXX503" >> $GITHUB_ENV
         echo "DEVICE_NAME=LXX503" >> $GITHUB_ENV
-        echo "MAKEFILE_NAME=pb_LXX503" >> $GITHUB_ENV
+        echo "MAKEFILE_NAME=twrp_LXX503" >> $GITHUB_ENV
         echo "BUILD_TARGET=boot" >> $GITHUB_ENV
 
     - name: Check Out
@@ -59,7 +59,7 @@ jobs:
 
     - name: Repo Sync
       run: |
-        repo sync -j$(nproc --all) --current-branch --force-sync --no-clone-bundle --no-tags
+        repo sync -j$(nproc --all) --current-branch --no-clone-bundle --no-tags
       working-directory: workspace
 
     - name: Clone device tree
