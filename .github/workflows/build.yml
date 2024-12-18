@@ -14,7 +14,7 @@ jobs:
     - name: Set Run Variables
       run: |
         echo "MANIFEST_URL=https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp" >> $GITHUB_ENV
-        echo "MANIFEST_BRANCH=twrp-14.0" >> $GITHUB_ENV
+        echo "MANIFEST_BRANCH=twrp-14" >> $GITHUB_ENV
         echo "DEVICE_TREE_URL=https://github.com/ayusc/twrp-LXX503" >> $GITHUB_ENV
         echo "DEVICE_TREE_BRANCH=master" >> $GITHUB_ENV
         echo "DEVICE_PATH=device/lava/LXX503" >> $GITHUB_ENV
@@ -64,8 +64,8 @@ jobs:
 
     - name: Clone device tree
       run: |
-        git clone https://gitlab.com/OrangeFox/misc/theme.git bootable/recovery/gui/theme
         git clone $DEVICE_TREE_URL -b $DEVICE_TREE_BRANCH ./$DEVICE_PATH
+        git clone https://gitlab.com/OrangeFox/misc/theme.git bootable/recovery/gui/theme
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Set Swap Space
