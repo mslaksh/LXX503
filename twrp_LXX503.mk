@@ -17,7 +17,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
 
 # Inherit from LXX503 device
 $(call inherit-product, vendor/twrp/config/common.mk)
-$(call inherit-product, device/lava/LXX503/BoardConfig.mk)
+$(call inherit-product, device/lava/LXX503/device.mk)
 
 # Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := LXX503
