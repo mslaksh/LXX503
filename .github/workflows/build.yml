@@ -1,0 +1,96 @@
+name: Recovery Build
+
+on:      
+  push:
+     branches:
+      - master
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - name: Set Run Variables
+      run: |
+        echo "MANIFEST_URL=https://github.com/PitchBlackRecoveryProject/manifest_pb" >> $GITHUB_ENV
+        echo "MANIFEST_BRANCH=android-14.0" >> $GITHUB_ENV
+        echo "DEVICE_TREE_URL=https://github.com/ayusc/pbrp-LXX503" >> $GITHUB_ENV
+        echo "DEVICE_TREE_BRANCH=master" >> $GITHUB_ENV
+        echo "DEVICE_PATH=device/lava/LXX503" >> $GITHUB_ENV
+        echo "DEVICE_NAME=LXX503" >> $GITHUB_ENV
+        echo "MAKEFILE_NAME=pb_LXX503" >> $GITHUB_ENV
+        echo "BUILD_TARGET=boot" >> $GITHUB_ENV
+
+    - name: Check Out
+      uses: actions/checkout@v3
+
+    - name: Cleanup
+      uses: rokibhasansagar/slimhub_actions@main
+
+    - name: Prepare the environment
+      run: |
+        sudo apt update
+        sudo apt -y upgrade
+        sudo apt -y install gperf gcc-multilib gcc-10-multilib g++-multilib g++-10-multilib libc6-dev lib32ncurses5-dev x11proto-core-dev libx11-dev tree lib32z-dev libgl1-mesa-dev libxml2-utils xsltproc bc ccache lib32readline-dev lib32z1-dev liblz4-tool libncurses5-dev libsdl1.2-dev libwxgtk3.0-gtk3-dev libxml2 lzop pngcrush schedtool squashfs-tools imagemagick libbz2-dev lzma ncftp qemu-user-static libstdc++-10-dev libncurses5 python3
+
+    - name: Install OpenJDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: '8'
+
+    - name: Install repo
+      run: |
+        mkdir ~/bin
+        curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+        chmod a+x ~/bin/repo
+        sudo ln -sf ~/bin/repo /usr/bin/repo
+
+    - name: Initialize repo
+      run: |
+        mkdir workspace
+        cd workspace
+        echo "workspace-folder=$(pwd)" >> $GITHUB_OUTPUT
+        git config --global user.name "ayusc"
+        git config --global user.email "ayuschatterjee2003@gmail.com"
+        repo init --depth=1 -u $MANIFEST_URL -b $MANIFEST_BRANCH
+      id: pwd
+
+    - name: Repo Sync
+      run: |
+        repo sync -j$(nproc --all) --force-sync
+      working-directory: workspace
+
+    - name: Clone device tree
+      run: |
+        git clone $DEVICE_TREE_URL -b $DEVICE_TREE_BRANCH ./$DEVICE_PATH
+      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+
+    - name: Set Swap Space
+      uses: pierotofy/set-swap-space@master
+      with:
+        swap-size-gb: 12
+
+    - name: Building recovery
+      run: |
+        source build/envsetup.sh
+        export ALLOW_MISSING_DEPENDENCIES=true
+        lunch $MAKEFILE_NAME-eng && make clean && make ${BUILD_TARGET}image -j$(nproc --all)
+        mka pbrp -j$(nproc --all)
+      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+
+    - name: Upload to Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: | 
+          workspace/out/target/product/$DEVICE_NAME/*.img
+          workspace/out/target/product/$DEVICE_NAME/*.zip
+        name: $DEVICE_NAME-${{ github.run_id }}
+        tag_name: ${{ github.run_id }}
+        body: |
+          Manifest: $MANIFEST_BRANCH
+          Device: $DEVICE_NAME
+          Target: $BUILD_TARGET.img
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
