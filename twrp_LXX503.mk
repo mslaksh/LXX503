@@ -20,7 +20,7 @@ $(call inherit-product, device/lava/LXX503/device.mk)
 
 # Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := LXX503
-PRODUCT_NAME := pb_LXX503
+PRODUCT_NAME := twrp_LXX503
 PRODUCT_BRAND := LAVA
 PRODUCT_MODEL := LAVA BLAZE 5G
 PRODUCT_MANUFACTURER := LAVA
