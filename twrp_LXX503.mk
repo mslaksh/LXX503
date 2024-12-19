@@ -10,7 +10,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/base.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base.mk)
 
 # Installs gsi keys into ramdisk, to boot a developer GSI with verified boot.
-$(call inherit-product, $(SRC_TARGET_DIR)/product/gsi_keys.mk)
+# $(call inherit-product, $(SRC_TARGET_DIR)/product/gsi_keys.mk)
 
 # Virtual A/B OTA
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
@@ -18,6 +18,8 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
 # Inherit from LXX503 device
 $(call inherit-product, vendor/twrp/config/common.mk)
 $(call inherit-product, device/lava/LXX503/device.mk)
+
+PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,$(LOCAL_PATH)/recovery/root,recovery/root)
 
 # Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := LXX503
