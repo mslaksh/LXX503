@@ -13,7 +13,7 @@ jobs:
     - name: Set Run Variables
       run: |
         echo "MANIFEST_URL=https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp" >> $GITHUB_ENV
-        echo "MANIFEST_BRANCH=twrp-14" >> $GITHUB_ENV
+        echo "MANIFEST_BRANCH=twrp-11" >> $GITHUB_ENV
         echo "DEVICE_TREE_URL=https://github.com/ayusc/twrp-LXX503" >> $GITHUB_ENV
         echo "DEVICE_TREE_BRANCH=master" >> $GITHUB_ENV
         echo "DEVICE_PATH=device/lava/LXX503" >> $GITHUB_ENV
