@@ -17,6 +17,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
 
 # Inherit from LXX503 device
 $(call inherit-product, vendor/twrp/config/common.mk)
+$(call inherit-product, device/lava/LXX503/device.mk)
 
 PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,$(LOCAL_PATH)/recovery/root,recovery/root)
 
