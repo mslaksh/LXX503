@@ -42,7 +42,7 @@ jobs:
         qemu-user-static libstdc++-10-dev libncurses5 python3 tree git \
         automake bison build-essential zip curl zlib1g-dev zlib1g-dev:i386 \
         python-networkx libbz2-1.0 libghc-bzlib-dev dpkg-dev make optipng \
-        pkg-config cmake ninja-build python3-pip openjdk-11-jdk unzip rsync
+        pkg-config cmake ninja-build unzip rsync
 
     - name: Install OpenJDK
       uses: actions/setup-java@v3
