@@ -19,8 +19,6 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
 $(call inherit-product, vendor/twrp/config/common.mk)
 $(call inherit-product, device/lava/LXX503/device.mk)
 
-PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,$(LOCAL_PATH)/recovery/root,recovery/root)
-
 # Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := LXX503
 PRODUCT_NAME := twrp_LXX503
