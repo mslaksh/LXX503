@@ -1,31 +1,69 @@
-name: Recovery Build
+name: TWRP Recovery Build
 
-on:      
-  push:
-     branches:
-      - master
+on:
+  workflow_dispatch:
+    inputs:
+      MANIFEST_URL:
+        description: 'MANIFEST_URL'
+        required: true
+        default: 'https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp'
+      MANIFEST_BRANCH:
+        description: 'MANIFEST_BRANCH'
+        required: true
+        default: 'twrp-11'
+      DEVICE_TREE_URL:
+        description: 'DEVICE_TREE_URL'
+        required: true
+        default: ''
+      DEVICE_TREE_BRANCH:
+        description: 'DEVICE_TREE_BRANCH'
+        required: true
+        default: 'android-11'
+      DEVICE_PATH:
+        description: 'DEVICE_PATH'
+        required: true
+        default: 'device/lava/LXX503'
+      DEVICE_NAME:
+        description: 'DEVICE_NAME'
+        required: true
+        default: 'LXX503'
+      MAKEFILE_NAME:
+        description: 'MAKEFILE_NAME'
+        required: true
+        default: 'twrp_LXX503'
+      BUILD_TARGET:
+        description: 'BUILD_TARGET'
+        required: true
+        default: 'boot'
+
 jobs:
   build:
+    if: github.event.repository.owner.id == github.event.sender.id
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-    - name: Set Run Variables
+    - name: Display Run Parameters
       run: |
-        echo "MANIFEST_URL=https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp" >> $GITHUB_ENV
-        echo "MANIFEST_BRANCH=twrp-14" >> $GITHUB_ENV
-        echo "DEVICE_TREE_URL=https://github.com/ayusc/twrp-LXX503" >> $GITHUB_ENV
-        echo "DEVICE_TREE_BRANCH=master" >> $GITHUB_ENV
-        echo "DEVICE_PATH=device/lava/LXX503" >> $GITHUB_ENV
-        echo "DEVICE_NAME=LXX503" >> $GITHUB_ENV
-        echo "MAKEFILE_NAME=twrp_LXX503" >> $GITHUB_ENV
-        echo "BUILD_TARGET=boot" >> $GITHUB_ENV
-
+        echo "::group::User Environment Variables"
+        echo "Manifest URL: ${{ github.event.inputs.MANIFEST_URL }}"
+        echo "Manifest Branch: ${{ github.event.inputs.MANIFEST_BRANCH }}"
+        echo "Device Tree URL: ${{ github.event.inputs.DEVICE_TREE_URL }}"
+        echo "Device Tree Branch: ${{ github.event.inputs.DEVICE_TREE_BRANCH }}"
+        echo "Device Path: ${{ github.event.inputs.DEVICE_PATH }}"
+        echo "Device Name: ${{ github.event.inputs.DEVICE_NAME }}"
+        echo "Makefile Name: ${{ github.event.inputs.MAKEFILE_NAME }}"
+        echo "Build Target: ${{ github.event.inputs.BUILD_TARGET }}.img"
+        echo "::endgroup::"
+ 
+    # You might want to Checkout your repo first, but not mandatory
     - name: Check Out
       uses: actions/checkout@v3
-
+    # Cleanup The Actions Workspace Using Custom Composite Run Actions
+    
     - name: Cleanup
       uses: rokibhasansagar/slimhub_actions@main
+      # That's it! Now use your normal steps
 
     - name: Prepare the environment
       run: |
@@ -45,30 +83,26 @@ jobs:
         curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
         chmod a+x ~/bin/repo
         sudo ln -sf ~/bin/repo /usr/bin/repo
-
+      
     - name: Initialize repo
       run: |
         mkdir workspace
         cd workspace
         echo "workspace-folder=$(pwd)" >> $GITHUB_OUTPUT
-        git config --global user.name "ayusc"
-        git config --global user.email "ayuschatterjee2003@gmail.com"
-        repo init --depth=1 -u $MANIFEST_URL -b $MANIFEST_BRANCH
+        git config --global user.name "kelexine"
+        git config --global user.email "frankiekelechi@gmail.com"
+        repo init --depth=1 -u ${{ github.event.inputs.MANIFEST_URL }} -b ${{ github.event.inputs.MANIFEST_BRANCH }}
       id: pwd
-
+          
     - name: Repo Sync
       run: |
         repo sync -j$(nproc --all) --force-sync
       working-directory: workspace
-
+      
     - name: Clone device tree
       run: |
-        git clone $DEVICE_TREE_URL -b $DEVICE_TREE_BRANCH ./$DEVICE_PATH
+        git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
- 
-    - name: Show file structures
-      run: |
-        tree
 
     - name: Set Swap Space
       uses: pierotofy/set-swap-space@master
@@ -79,20 +113,23 @@ jobs:
       run: |
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
-        lunch $MAKEFILE_NAME-eng && make clean && make ${BUILD_TARGET}image -j$(nproc --all)
+        lunch ${{ github.event.inputs.MAKEFILE_NAME }}-eng && make clean && make ${{ github.event.inputs.BUILD_TARGET }}image -j$(nproc --all)
+        echo "---> Build Finished Successfully"
+        echo "---> Preparing for Uploads..."
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Upload to Release
       uses: softprops/action-gh-release@v1
       with:
         files: | 
-          workspace/out/target/product/$DEVICE_NAME/*.img
-          workspace/out/target/product/$DEVICE_NAME/*.zip
-        name: $DEVICE_NAME-${{ github.run_id }}
+          workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/*.img
+          workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/*.zip
+        name: TWRP Recovery for Lava Blaze 5g "(${{ github.event.inputs.DEVICE_NAME }})"
         tag_name: ${{ github.run_id }}
         body: |
-          Manifest: $MANIFEST_BRANCH
-          Device: $DEVICE_NAME
-          Target: $BUILD_TARGET.img
+          Nightly TWRP Recovery release for Lava Blaze 5G (LXX503)
+          Manifest: ${{ github.event.inputs.MANIFEST_BRANCH }}
+          Device: ${{ github.event.inputs.DEVICE_NAME }}
+          Target: ${{ github.event.inputs.BUILD_TARGET }}.img
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
