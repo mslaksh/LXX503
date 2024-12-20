@@ -4,7 +4,6 @@ on:
   push:
      branches:
       - master
-      
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,7 +13,7 @@ jobs:
     - name: Set Run Variables
       run: |
         echo "MANIFEST_URL=https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp" >> $GITHUB_ENV
-        echo "MANIFEST_BRANCH=twrp-14" >> $GITHUB_ENV
+        echo "MANIFEST_BRANCH=twrp-11" >> $GITHUB_ENV
         echo "DEVICE_TREE_URL=https://github.com/ayusc/twrp-LXX503" >> $GITHUB_ENV
         echo "DEVICE_TREE_BRANCH=master" >> $GITHUB_ENV
         echo "DEVICE_PATH=device/lava/LXX503" >> $GITHUB_ENV
@@ -32,17 +31,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt -y upgrade
-        sudo apt -y install \
-        gperf gcc-multilib gcc-10-multilib g++-multilib g++-10-multilib \
-        libc6-dev lib32ncurses5-dev x11proto-core-dev libx11-dev \
-        lib32z-dev libgl1-mesa-dev libxml2-utils xsltproc bc \
-        ccache lib32readline-dev lib32z1-dev liblz4-tool libncurses5-dev \
-        libsdl1.2-dev libwxgtk3.0-gtk3-dev libxml2 lzop pngcrush \
-        schedtool squashfs-tools imagemagick libbz2-dev lzma ncftp \
-        qemu-user-static libstdc++-10-dev libncurses5 python3 tree git \
-        automake bison build-essential zip curl zlib1g-dev zlib1g-dev:i386 \
-        python-networkx libbz2-1.0 libghc-bzlib-dev dpkg-dev make optipng \
-        pkg-config cmake ninja-build unzip rsync
+        sudo apt -y install gperf gcc-multilib gcc-10-multilib g++-multilib g++-10-multilib libc6-dev lib32ncurses5-dev x11proto-core-dev libx11-dev tree lib32z-dev libgl1-mesa-dev libxml2-utils xsltproc bc ccache lib32readline-dev lib32z1-dev liblz4-tool libncurses5-dev libsdl1.2-dev libwxgtk3.0-gtk3-dev libxml2 lzop pngcrush schedtool squashfs-tools imagemagick libbz2-dev lzma ncftp qemu-user-static libstdc++-10-dev libncurses5 python3
 
     - name: Install OpenJDK
       uses: actions/setup-java@v3
