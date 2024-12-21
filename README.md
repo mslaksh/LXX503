@@ -5,8 +5,9 @@ This is not a recovery image and it must be flashed into the /boot partition (si
 
 ### Usage 
 Boot the recovery image with `fastboot boot twrp.img` (This will temporarily boot the recovery image without installing it)
+Now you can do your stuffs and after done reboot to system.
 
-### How to Install
+### How to Install 
 Installing the recovery isn't recommended on a device without dedicated recovery partition. 
 However if you want you can replace the stock recovery inside the boot image by installing recovery ramdisk.
 
