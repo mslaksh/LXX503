@@ -1,7 +1,7 @@
 # LAVA BLAZE 5G (LXX503)
 
 ### Read Carefully !!!
-This is not a recovery image and it must be flashed into the /boot partition (since it's a A/B partition device with no recovery partition). 
+This is not a recovery image (instead a boot image) and it must be flashed into the /boot partition (since it's a A/B partition device with no recovery partition). 
 
 ### Usage 
 Boot the recovery image with `fastboot boot twrp.img` (This will temporarily boot the recovery image without installing it)
