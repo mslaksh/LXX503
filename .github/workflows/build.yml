@@ -131,7 +131,7 @@ jobs:
         files: | 
           workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/*.img
           workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/*.zip
-        name: TWRP Recovery for Lava Blaze 5g "(${{ github.event.inputs.DEVICE_NAME }})"
+        name: TWRP Recovery for Lava Blaze 5g (${{ github.event.inputs.DEVICE_NAME }})
         tag_name: ${{ github.run_id }}
         body: |
           Nightly TWRP Recovery release for Lava Blaze 5G (LXX503)
