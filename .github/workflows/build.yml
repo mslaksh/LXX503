@@ -101,8 +101,6 @@ jobs:
         mkdir workspace
         cd workspace
         echo "workspace-folder=$(pwd)" >> $GITHUB_OUTPUT
-        git config --global user.name "kelexine"
-        git config --global user.email "frankiekelechi@gmail.com"
         repo init --depth=1 -u ${{ github.event.inputs.MANIFEST_URL }} -b ${{ github.event.inputs.MANIFEST_BRANCH }}
       id: pwd
           
@@ -121,6 +119,8 @@ jobs:
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
         lunch ${{ github.event.inputs.MAKEFILE_NAME }}-eng && make clean && make ${{ github.event.inputs.BUILD_TARGET }}image -j$(nproc --all)
+        mv workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/boot.img workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/twrp.img
+        ls workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/
         echo "---> Build Finished Successfully"
         echo "---> Preparing for Uploads..."
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
@@ -129,14 +129,15 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         files: | 
-          workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/*.img
-          workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/*.zip
+          workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/twrp.img
+          workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/twrp.zip
         name: TWRP Recovery for Lava Blaze 5g (${{ github.event.inputs.DEVICE_NAME }})
         tag_name: ${{ github.run_id }}
         body: |
           Nightly TWRP Recovery release for Lava Blaze 5G (LXX503)
           Manifest: ${{ github.event.inputs.MANIFEST_BRANCH }}
           Device: ${{ github.event.inputs.DEVICE_NAME }}
-          Target: ${{ github.event.inputs.BUILD_TARGET }}.img
+          Target Image: ${{ github.event.inputs.BUILD_TARGET }}.img
+          Taget Zip: ${{ github.event.inputs.BUILD_TARGET }}.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
