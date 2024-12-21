@@ -37,7 +37,8 @@ PRODUCT_PACKAGES += \
 
 # MTK Preloader Utils
 PRODUCT_PACKAGES += \
-    mtk_plpath_utils.recovery
+    mtk_plpath_utils.recovery \
+    fastbootd
 
 PRODUCT_PACKAGES += \
     android.hardware.boot@1.2-mtkimpl.recovery \
