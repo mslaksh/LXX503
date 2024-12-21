@@ -14,7 +14,7 @@ However if you want you can replace the stock recovery inside the boot image by 
 Steps:
 
 1. Flash the recovery image with `fastboot flash boot twrp.img` (Your phone will not boot into system anymore and instead boot into twrp)
-2. In TWRP, navigate to 'Backup' and backup the '/data' partition which comtains all your device settings and apps. Also bckup the nvdata and nvram partitions.
+2. In TWRP, navigate to 'Backup' and backup the '/data' partition which contains all your device settings and apps. Also backup the nvdata and nvram partitions.
 (No need to factory reset and clear internal storage)
 4. In TWRP, navigate to 'Wipe', select 'System' and 'Data', and swipe right on the 'Swipe to Wipe' button to wipe the selected partitions.
 5. IN TWRP, go to 'Mount' and enable the 'MTP' option. Your device will now appear on your PC, allowing you to transfer the TWRP zip file on your device.
@@ -23,7 +23,7 @@ Steps:
 8. Select the twrp.img file from your device's internal storage or wherever you've saved it, swipe to install, and then reboot.
 9. Download the official firmware for Lava Blaze 5G from [here](https://kmportal.indlava.com/upload/client/SP/LXX503_BLAZE_5G_4_6_8GB/)
 10. Install the firmware file with twrp or adb sideload.
-11. Now restore the '/data' partition from the backup.
+11. Now restore the '/data' partition from the backup. (all your apps and device settings will be restored)
    
 That's it! TWRP should now be successfully installed on your device. It successfully replaced the stock recovery on the device.
 Now to access the recovery press volume up+ power keys together and toggle the recovery option.
