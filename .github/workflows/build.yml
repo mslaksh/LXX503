@@ -125,7 +125,7 @@ jobs:
           Nightly TWRP Recovery release for Lava Blaze 5G (LXX503)
           Manifest: ${{ github.event.inputs.MANIFEST_BRANCH }}
           Device: ${{ github.event.inputs.DEVICE_NAME }}
-          Target Image: ${{ github.event.inputs.BUILD_TARGET }}.img
-          Taget Zip: ${{ github.event.inputs.BUILD_TARGET }}.zip
+          Target Image: twrp.img
+          Taget Zip: twrp_flashable.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
