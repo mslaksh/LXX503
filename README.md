@@ -1,5 +1,7 @@
 # LAVA BLAZE 5G (LXX503)
 
+[![TWRP Recovery Build](https://github.com/ayusc/twrp-LXX503/actions/workflows/build.yml/badge.svg?event=workflow_dispatch)](https://github.com/ayusc/twrp-LXX503/actions/workflows/build.yml)
+
 ### Read Carefully !!!
 This is not a recovery image (instead a boot image) and it must be flashed into the /boot partition (since it's a A/B partition device with no recovery partition). 
 
