@@ -1,5 +1,12 @@
 LOCAL_PATH := device/lava/LXX503
 
+# Soong Namespaces
+PRODUCT_SOONG_NAMESPACES += \
+    $(LOCAL_PATH)
+
+# Dynamic Partitions
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
+
 # A/B
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_system=true \
@@ -27,6 +34,19 @@ PRODUCT_PACKAGES += \
     update_engine \
     update_verifier \
     update_engine_sideload
+
+# MTK Preloader Utils
+PRODUCT_PACKAGES += \
+    mtk_plpath_utils.recovery \
+    fastbootd
+
+PRODUCT_PACKAGES += \
+    android.hardware.boot@1.2-mtkimpl.recovery \
+    libmtk_bsg.recovery
+
+# Fastbootd
+PRODUCT_PACKAGES += \
+    android.hardware.fastboot@1.0-impl-mock
 
 PRODUCT_EXTRA_RECOVERY_KEYS += \
     $(LOCAL_PATH)/security/lava
