@@ -18,7 +18,7 @@ $(call inherit-product, device/lava/LXX503/device.mk)
 
 # Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := LXX503
-PRODUCT_NAME := twrp_LXX503
+PRODUCT_NAME := lineage_LXX503
 PRODUCT_BRAND := LAVA
 PRODUCT_MODEL := LAVA BLAZE 5G
 PRODUCT_MANUFACTURER := Lava International
@@ -34,4 +34,4 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
 
 BUILD_FINGERPRINT := LAVA/LXX503/LXX503:14/UP1A.231005.007/1733797600:user/release-keys
 
-MAINTAINER := "Ayus Chatterjee"
+MAINTAINER := "Shanlaksh"
